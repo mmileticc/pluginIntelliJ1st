@@ -49,6 +49,15 @@ class MyCommentAnnotator : Annotator {
                     .range(element)
                     .create()
             }
+
+            element.text.startsWith("// DONE") -> {
+                holder.newSilentAnnotation(HighlightSeverity.INFORMATION)
+                    .enforcedTextAttributes(
+                        TextAttributes(JBColor.CYAN, null, null, null, Font.PLAIN)
+                    )
+                    .range(element)
+                    .create()
+            }
         }
     }
 }

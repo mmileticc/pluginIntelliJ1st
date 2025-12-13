@@ -19,6 +19,10 @@
                     id="FocusKeeper9000"
                     anchor="right"
                     icon="AllIcons.General.Web"/>
+        <toolWindow factoryClass="com.github.mmileticc.pluginintellij1st.toolWindow.TodoToolWindowFactory"
+                    id="Code Tasks"
+                    anchor="right"
+                    icon="AllIcons.Actions.ListFiles"/>
         <postStartupActivity implementation="com.github.mmileticc.pluginintellij1st.startup.MyProjectActivity" />
         <annotator
                 language="kotlin"
