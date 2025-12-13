@@ -20,15 +20,10 @@ object MyPluginLogic {
         val factory = KtPsiFactory(project)
 
 
-        val json = GroqAPI.ask("koji je glavni grad rumunije")
-        val answer = GroqAPI.extractContent(json)
+        val json = OpenAIAPI.ask("Daj mi neki novi nasumican glavni grad evrope")
+        val answer = OpenAIAPI.extractContent(json)
 
-        val safe = answer
-            .replace("\n", " ")
-            .replace("*/", "* /")
-            .trim()
-
-        val comment = factory.createComment("/* $safe */")
+        val comment = factory.createComment("/* $answer */")
 
 
         WriteCommandAction.runWriteCommandAction(project) {
@@ -48,29 +43,27 @@ object MyPluginLogic {
 
 
 
-object GroqAPI {
 
-    //private const val API_KEY = "vas kljuc"
+object OpenAIAPI {
+
+    private val API_KEY = System.getenv("OPENAI_API_KEY") ?: ""
 
     fun ask(question: String): String {
         val client = HttpClient.newHttpClient()
 
         val body = """
-        {
-          "model": "llama-3.1-8b-instant",
-          "messages": [
-            {"role": "user", "content": "$question"}
-          ]
-        }
+            {
+              "model": "gpt-4o-mini",
+              "messages": [
+                {"role": "user", "content": "$question"}
+              ]
+            }
         """.trimIndent()
 
-
-
-
         val request = HttpRequest.newBuilder()
-            .uri(URI.create("https://api.groq.com/openai/v1/chat/completions"))
+            .uri(URI.create("https://api.openai.com/v1/chat/completions"))
             .header("Content-Type", "application/json")
-            //.header("Authorization", "Bearer $API_KEY")
+            .header("Authorization", "Bearer $API_KEY")
             .POST(HttpRequest.BodyPublishers.ofString(body))
             .build()
 
@@ -82,7 +75,7 @@ object GroqAPI {
         val obj = JSONObject(json)
 
         if (!obj.has("choices")) {
-            return "Groq error: ${obj.toString(2)}"
+            return "OpenAI error: ${obj.toString(2)}"
         }
 
         return obj

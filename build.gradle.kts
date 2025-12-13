@@ -149,6 +149,10 @@ intellijPlatformTesting {
                     )
                 }
             }
+            task {
+                environment("OPENAI_API_KEY", System.getenv("OPENAI_API_KEY"))
+            }
+
 
             plugins {
                 robotServerPlugin()
