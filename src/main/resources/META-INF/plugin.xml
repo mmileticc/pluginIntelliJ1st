@@ -41,6 +41,36 @@
             <add-to-group group-id="ToolsMenu" anchor="last"/>
         </action>
 
+        <!-- Editor popup action for roasting selected code -->
+        <action id="RoastSelectionAction"
+                class="com.github.mmileticc.pluginintellij1st.RoastSelectionAction"
+                text="Roast my code"
+                description="Roast selected code and insert a comment above it">
+            <add-to-group group-id="EditorPopupMenu" anchor="last"/>
+        </action>
+
+        <!-- Roast level selector (Tools menu) -->
+        <group id="RoastLevelGroup" text="Roast level">
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
+            <action id="RoastLevelLow"
+                    class="com.github.mmileticc.pluginintellij1st.RoastLevelLowAction"
+                    text="Roast level: Low"/>
+            <action id="RoastLevelMedium"
+                    class="com.github.mmileticc.pluginintellij1st.RoastLevelMediumAction"
+                    text="Roast level: Medium"/>
+            <action id="RoastLevelHigh"
+                    class="com.github.mmileticc.pluginintellij1st.RoastLevelHighAction"
+                    text="Roast level: High"/>
+        </group>
+
+        <!-- Delete all roast comments (Tools menu) -->
+        <action id="DeleteRoastCommentsAction"
+                class="com.github.mmileticc.pluginintellij1st.DeleteRoastCommentsAction"
+                text="Delete all roast comments"
+                description="Removes all roast comments from current file">
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
+        </action>
+
     </actions>
 
 </idea-plugin>

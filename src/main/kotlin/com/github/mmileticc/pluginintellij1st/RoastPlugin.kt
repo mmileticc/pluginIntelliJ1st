@@ -30,7 +30,7 @@ object RoastPlugin {
                 )
 
                 val roastText = OpenAIAPI.extractContent(roast)
-                val comment = factory.createComment("/*Roast: $roastText*/")
+                val comment = factory.createComment("// ROAST:  $roastText")
 
                 //funDecl.addBefore(comment, funDecl)
                 funDecl.parent.addBefore(comment, funDecl)

@@ -19,7 +19,7 @@ import java.awt.Font
 class MyCommentAnnotator : Annotator {
     override fun annotate(element: PsiElement, holder: AnnotationHolder) {
         if (element is PsiComment &&
-            element.text.startsWith("// MY_TAG")
+            element.text.startsWith("// ROAST")
         ) {
             holder.newSilentAnnotation(HighlightSeverity.INFORMATION)
                 .textAttributes(
