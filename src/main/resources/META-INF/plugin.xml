@@ -28,6 +28,9 @@
                 class="com.github.mmileticc.pluginintellij1st.RoastSelectionAction"
                 text="Roast my code"
                 description="Roast selected code and insert a comment above it">
+            <keyboard-shortcut
+                    keymap="$default"
+                    first-keystroke="ctrl alt R"/>
             <add-to-group group-id="EditorPopupMenu" anchor="last"/>
         </action>
 
@@ -65,7 +68,11 @@
                 <action id="DeleteGeneratedCommentsAction"
                         class="com.github.mmileticc.pluginintellij1st.DeleteGeneratedCommentsAction"
                         text="Delete all generated comments"
-                        description="Removes all generated roast comments from current file"/>
+                        description="Removes all generated roast comments from current file">
+                    <keyboard-shortcut
+                            keymap="$default"
+                            first-keystroke="ctrl alt D"/>
+                </action>
                 <action id="DeleteNiceCommentsAction"
                         class="com.github.mmileticc.pluginintellij1st.DeleteNiceCommentsAction"
                         text="Delete only NICE comments"
