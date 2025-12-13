@@ -8,43 +8,47 @@ import com.intellij.openapi.editor.markup.TextAttributes
 import com.intellij.psi.PsiComment
 import com.intellij.psi.PsiElement
 import com.intellij.ui.JBColor
-import org.apache.xmlgraphics.image.codec.png.PNGEncodeParam
 import java.awt.Color
 import java.awt.Font
 
 class MyCommentAnnotator : Annotator {
+
+    companion object {
+        private val ROAST_KEY = TextAttributesKey.createTextAttributesKey("ROAST_COMMENT")
+        private val HELP_KEY = TextAttributesKey.createTextAttributesKey("HELP_COMMENT")
+        private val NICE_KEY = TextAttributesKey.createTextAttributesKey("NICE_COMMENT")
+    }
+
     override fun annotate(element: PsiElement, holder: AnnotationHolder) {
-        if (element is PsiComment &&
-            element.text.startsWith("// ROAST")
-        ) {
-            holder.newSilentAnnotation(HighlightSeverity.INFORMATION)
-                .textAttributes(
-                    TextAttributesKey.createTextAttributesKey(
-                        "MY_CUSTOM_COMMENT",
-                        TextAttributes(JBColor.pink, null, null, null, Font.PLAIN)
-                    ))
-                .range(element)
-                .create()
-        } else if (element is PsiComment && element.text.startsWith("// HELP"))
-        {
-            holder.newSilentAnnotation(HighlightSeverity.INFORMATION)
-                .textAttributes(
-                    TextAttributesKey.createTextAttributesKey(
-                        "MY_CUSTOM_COMMENT",
+        if (element !is PsiComment) return
+
+        when {
+            element.text.startsWith("// ROAST") -> {
+                holder.newSilentAnnotation(HighlightSeverity.INFORMATION)
+                    .enforcedTextAttributes(
+                        TextAttributes(JBColor.PINK, null, null, null, Font.BOLD)
+                    )
+                    .range(element)
+                    .create()
+            }
+
+            element.text.startsWith("// HELP") -> {
+                holder.newSilentAnnotation(HighlightSeverity.INFORMATION)
+                    .enforcedTextAttributes(
                         TextAttributes(Color(207,187,151), Color(57,37,1), null, null, Font.PLAIN)
-                    ))
-                .range(element)
-                .create()
-        } else if (element is PsiComment && element.text.startsWith("// NICE"))
-        {
-            holder.newSilentAnnotation(HighlightSeverity.INFORMATION)
-                .textAttributes(
-                    TextAttributesKey.createTextAttributesKey(
-                        "MY_CUSTOM_COMMENT",
-                        TextAttributes(JBColor.cyan, null, null, null, Font.PLAIN)
-                    ))
-                .range(element)
-                .create()
+                    )
+                    .range(element)
+                    .create()
+            }
+
+            element.text.startsWith("// NICE") -> {
+                holder.newSilentAnnotation(HighlightSeverity.INFORMATION)
+                    .enforcedTextAttributes(
+                        TextAttributes(JBColor.CYAN, null, null, null, Font.PLAIN)
+                    )
+                    .range(element)
+                    .create()
+            }
         }
     }
 }

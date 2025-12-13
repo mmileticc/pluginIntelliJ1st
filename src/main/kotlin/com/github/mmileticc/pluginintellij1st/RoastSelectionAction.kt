@@ -12,7 +12,9 @@ import com.intellij.openapi.progress.Task
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiDocumentManager
 import com.intellij.util.ui.JBUI
+import java.awt.BorderLayout
 import javax.swing.JLabel
+import javax.swing.JPanel
 import javax.swing.SwingConstants
 
 class RoastSelectionAction : AnAction("Roast my code") {
@@ -68,10 +70,17 @@ class RoastSelectionAction : AnAction("Roast my code") {
         // Prepare the GIF label for the popup (EDT)
         var popupHandle: CornerPopup.Handle? = null
         ApplicationManager.getApplication().invokeLater {
-            val icon = javax.swing.ImageIcon(RoastSelectionAction::class.java.getResource("/icons/Loading_Cat.gif"))
+            val icon = javax.swing.ImageIcon(RoastSelectionAction::class.java.getResource("/icons/Loading_Cat_small.gif"))
             val label = JLabel("", icon, SwingConstants.LEADING)
-            label.border = JBUI.Borders.empty(2)
-            popupHandle = CornerPopup.showBottomRight(project, label)
+            label.border = JBUI.Borders.empty(3)
+
+            val wrapper = JPanel(BorderLayout()).apply {
+                isOpaque = false
+                border = JBUI.Borders.empty(22) // ← ovo je "margin"
+                add(label, BorderLayout.CENTER)
+            }
+
+            popupHandle = CornerPopup.showBottomRight(project, wrapper)
         }
 
         // Run API call asynchronously to avoid blocking UI and file locks
