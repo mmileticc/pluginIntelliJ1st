@@ -31,6 +31,12 @@
                 description="Dodaje komentar svakoj funkciji numerise ih">
             <add-to-group group-id="ToolsMenu" anchor="last"/>
         </action>
+        <action id="RoastAction"
+                class="com.github.mmileticc.pluginintellij1st.RoastAction"
+                text="Roast svih funkcija"
+                description="Dodaje roast komentar svakoj funkciji">
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
+        </action>
 
     </actions>
 </idea-plugin>
