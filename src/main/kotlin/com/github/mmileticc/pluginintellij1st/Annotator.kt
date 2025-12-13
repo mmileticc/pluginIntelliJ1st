@@ -31,7 +31,7 @@ class MyCommentAnnotator : Annotator {
                 .textAttributes(
                     TextAttributesKey.createTextAttributesKey(
                         "MY_CUSTOM_COMMENT",
-                        TextAttributes(Color(207,187,151), null, null, null, Font.PLAIN)
+                        TextAttributes(Color(207,187,151), Color(57,37,1), null, null, Font.PLAIN)
                     ))
                 .range(element)
                 .create()

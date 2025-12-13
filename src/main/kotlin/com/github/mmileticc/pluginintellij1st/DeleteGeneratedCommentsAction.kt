@@ -10,15 +10,15 @@ import com.intellij.psi.PsiDocumentManager
 import com.intellij.psi.PsiFile
 import com.intellij.psi.util.PsiTreeUtil
 
-class DeleteRoastCommentsAction : AnAction("Delete all roast comments") {
+class DeleteGeneratedCommentsAction : AnAction("Delete all generated comments") {
     override fun actionPerformed(e: AnActionEvent) {
         val project = e.project ?: return
         val file = e.getData(CommonDataKeys.PSI_FILE) ?: return
 
-        removeRoastComments(project, file)
+        removeGeneratedComments(project, file)
     }
 
-    private fun removeRoastComments(project: Project, file: PsiFile) {
+    private fun removeGeneratedComments(project: Project, file: PsiFile) {
         WriteCommandAction.runWriteCommandAction(project) {
             val comments = PsiTreeUtil.collectElementsOfType(file, PsiComment::class.java).toList()
             for (c in comments) {

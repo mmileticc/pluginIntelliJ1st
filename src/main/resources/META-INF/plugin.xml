@@ -57,8 +57,8 @@
 
         <!-- Delete all roast comments (Tools menu) -->
         <action id="DeleteRoastCommentsAction"
-                class="com.github.mmileticc.pluginintellij1st.DeleteRoastCommentsAction"
-                text="Delete all roast comments"
+                class="com.github.mmileticc.pluginintellij1st.DeleteGeneratedCommentsAction"
+                text="Delete all generated comments"
                 description="Removes all roast comments from current file">
             <add-to-group group-id="ToolsMenu" anchor="last"/>
         </action>
