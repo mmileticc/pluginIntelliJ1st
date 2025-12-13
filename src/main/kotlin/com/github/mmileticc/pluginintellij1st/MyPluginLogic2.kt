@@ -16,22 +16,7 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtPsiFactory
 import java.awt.Font
 
-class MyCommentAnnotator : Annotator {
-    override fun annotate(element: PsiElement, holder: AnnotationHolder) {
-        if (element is PsiComment &&
-            element.text.startsWith("// ROAST")
-        ) {
-            holder.newSilentAnnotation(HighlightSeverity.INFORMATION)
-                .textAttributes(
-                    TextAttributesKey.createTextAttributesKey(
-                    "MY_CUSTOM_COMMENT",
-                        TextAttributes(JBColor.magenta, null, null, null, Font.PLAIN)
-                ))
-                .range(element)
-                .create()
-        }
-    }
-}
+
 
 
 object MyPluginLogic2 {
