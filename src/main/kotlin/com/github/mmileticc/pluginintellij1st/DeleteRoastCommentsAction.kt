@@ -23,7 +23,9 @@ class DeleteRoastCommentsAction : AnAction("Delete all roast comments") {
             val comments = PsiTreeUtil.collectElementsOfType(file, PsiComment::class.java).toList()
             for (c in comments) {
                 val text = c.text
-                if (text.contains("Roast:", ignoreCase = true)) {
+                if (text.contains("ROAST:", ignoreCase = true)
+                    || text.contains("HELP:", ignoreCase=true)
+                    || text.contains("NICE:", ignoreCase=true)){
                     c.delete()
                 }
             }

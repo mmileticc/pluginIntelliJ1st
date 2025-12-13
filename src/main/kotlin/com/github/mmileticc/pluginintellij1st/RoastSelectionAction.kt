@@ -26,7 +26,7 @@ class RoastSelectionAction : AnAction("Roast my code") {
 
         val selectedText = selectionModel.selectedText ?: return
 
-        // Build prompt based on roast level
+        // Build prompt based on roast level and language
         val settings = ApplicationManager.getApplication().getService(RoastSettings::class.java)
         val level = settings.getLevel()
         val style = when (level) {
@@ -35,12 +35,21 @@ class RoastSelectionAction : AnAction("Roast my code") {
             RoastSettings.Level.HIGH -> "savage, unapologetically brutal"
         }
 
+        val languageInstruction = when (settings.getLanguage()) {
+            RoastSettings.Language.ENGLISH -> "Respond in English."
+            RoastSettings.Language.SERBIAN -> "Respond in Serbian (Latin script)."
+        }
+
         val prompt = """
             Roast this code in a $style tone.
+            $languageInstruction
             Keep the roast to a 1-2 sentences and do it in the following format
-            {Roasting}\n
+            // ROAST: {Roasting}\n
             // HELP: {Helpful insight and suggestions}\n
             Keep the insight short as well
+            In case the code works correctly and the syntax is all right, and it does not need to be roasted, just respond with a message in the following format:
+            // NICE: {Simple message praising the code and the developer}
+            
             Code:
             $selectedText
         """.trimIndent()
@@ -57,7 +66,7 @@ class RoastSelectionAction : AnAction("Roast my code") {
         val start = editor.selectionModel.selectionStart
         val line = document.getLineNumber(start)
         val lineStartOffset = document.getLineStartOffset(line)
-        val comment = "// ROAST: $roastText\n"
+        val comment = "$roastText\n"
 
         WriteCommandAction.runWriteCommandAction(project) {
             document.insertString(lineStartOffset, comment)

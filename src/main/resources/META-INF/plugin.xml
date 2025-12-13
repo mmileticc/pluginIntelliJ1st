@@ -44,6 +44,17 @@
                     text="Roast level: High"/>
         </group>
 
+        <!-- Roast language selector (Tools menu) -->
+        <group id="RoastLanguageGroup" text="Roast language">
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
+            <action id="RoastLanguageEnglish"
+                    class="com.github.mmileticc.pluginintellij1st.RoastLanguageEnglishAction"
+                    text="Roast language: English"/>
+            <action id="RoastLanguageSerbian"
+                    class="com.github.mmileticc.pluginintellij1st.RoastLanguageSerbianAction"
+                    text="Roast language: Serbian"/>
+        </group>
+
         <!-- Delete all roast comments (Tools menu) -->
         <action id="DeleteRoastCommentsAction"
                 class="com.github.mmileticc.pluginintellij1st.DeleteRoastCommentsAction"

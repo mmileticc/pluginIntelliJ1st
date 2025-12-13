@@ -10,9 +10,11 @@ import com.intellij.openapi.components.Storage
 class RoastSettings : PersistentStateComponent<RoastSettings.State> {
 
     enum class Level { LOW, MEDIUM, HIGH }
+    enum class Language { ENGLISH, SERBIAN }
 
     class State {
         var level: Level = Level.MEDIUM
+        var language: Language = Language.ENGLISH
     }
 
     private var state = State()
@@ -27,5 +29,11 @@ class RoastSettings : PersistentStateComponent<RoastSettings.State> {
 
     fun setLevel(level: Level) {
         state.level = level
+    }
+
+    fun getLanguage(): Language = state.language
+
+    fun setLanguage(language: Language) {
+        state.language = language
     }
 }
