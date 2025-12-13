@@ -1,5 +1,6 @@
 package com.github.mmileticc.pluginintellij1st
 
+import com.intellij.openapi.actionSystem.ActionUpdateThread
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.CommonDataKeys
@@ -112,6 +113,10 @@ class RoastSelectionAction : AnAction("Roast my code") {
                 }
             }
         })
+    }
+
+    override fun getActionUpdateThread(): ActionUpdateThread {
+        return ActionUpdateThread.BGT
     }
 
     private fun insertOrReplaceGeneratedComments(

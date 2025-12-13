@@ -32,7 +32,7 @@ class FocusKeeper9000ToolWindowFactory : ToolWindowFactory {
             return root
         }
 
-        val browser = JBCefBrowser("https://open.spotify.com/")
+        val browser = JBCefBrowser("https://youtube.com/shorts/")
 
         // Simple toolbar with Back/Forward/Reload
         val toolbar = JToolBar().apply {
