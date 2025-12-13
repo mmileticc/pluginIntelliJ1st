@@ -22,25 +22,6 @@
     </extensions>
 
     <actions>
-        <action id="MyAction"
-                class="com.github.mmileticc.pluginintellij1st.MyAction"
-                text="Run My Plugin"
-                description="Runs my custom logic">
-                <add-to-group group-id="ToolsMenu" anchor="last"/>
-        </action>
-        <action id="MyAction2"
-                class="com.github.mmileticc.pluginintellij1st.MyAction2"
-                text="Dodaj komentar svima"
-                description="Dodaje komentar svakoj funkciji numerise ih">
-            <add-to-group group-id="ToolsMenu" anchor="last"/>
-        </action>
-        <action id="RoastAction"
-                class="com.github.mmileticc.pluginintellij1st.RoastAction"
-                text="Roast svih funkcija"
-                description="Dodaje roast komentar svakoj funkciji">
-            <add-to-group group-id="ToolsMenu" anchor="last"/>
-        </action>
-
         <!-- Editor popup action for roasting selected code -->
         <action id="RoastSelectionAction"
                 class="com.github.mmileticc.pluginintellij1st.RoastSelectionAction"

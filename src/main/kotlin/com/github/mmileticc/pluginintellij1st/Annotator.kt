@@ -23,6 +23,16 @@ class MyCommentAnnotator : Annotator {
                     ))
                 .range(element)
                 .create()
+        } else if (element is PsiComment && element.text.startsWith("// HELP"))
+        {
+            holder.newSilentAnnotation(HighlightSeverity.INFORMATION)
+                .textAttributes(
+                    TextAttributesKey.createTextAttributesKey(
+                        "MY_CUSTOM_COMMENT",
+                        TextAttributes(JBColor.cyan, null, null, null, Font.PLAIN)
+                    ))
+                .range(element)
+                .create()
         }
     }
 }

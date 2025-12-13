@@ -32,13 +32,15 @@ class RoastSelectionAction : AnAction("Roast my code") {
         val style = when (level) {
             RoastSettings.Level.LOW -> "lighthearted and mildly teasing"
             RoastSettings.Level.MEDIUM -> "funny, sarcastic, and boldly teasing"
-            RoastSettings.Level.HIGH -> "savage, unapologetically brutal, but keep it one sentence"
+            RoastSettings.Level.HIGH -> "savage, unapologetically brutal"
         }
 
         val prompt = """
             Roast this code in a $style tone.
-            Do not explain, just roast it in exactly one sentence.
-
+            Keep the roast to a 1-2 sentences and do it in the following format
+            {Roasting}\n
+            // HELP: {Helpful insight and suggestions}\n
+            Keep the insight short as well
             Code:
             $selectedText
         """.trimIndent()
@@ -55,7 +57,7 @@ class RoastSelectionAction : AnAction("Roast my code") {
         val start = editor.selectionModel.selectionStart
         val line = document.getLineNumber(start)
         val lineStartOffset = document.getLineStartOffset(line)
-        val comment = "// ROAST: $roastText*/\n"
+        val comment = "// ROAST: $roastText\n"
 
         WriteCommandAction.runWriteCommandAction(project) {
             document.insertString(lineStartOffset, comment)
