@@ -9,6 +9,7 @@ import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.progress.ProgressManager
 import com.intellij.openapi.progress.Task
+import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiDocumentManager
 
 class RoastSelectionAction : AnAction("Roast my code") {
@@ -43,6 +44,7 @@ class RoastSelectionAction : AnAction("Roast my code") {
         }
 
         val start = editor.selectionModel.selectionStart
+        val end = editor.selectionModel.selectionEnd
 
         val prompt = """
             Roast this code in a $style tone.
@@ -70,14 +72,14 @@ class RoastSelectionAction : AnAction("Roast my code") {
 
                     ApplicationManager.getApplication().invokeLater {
                         if (!project.isDisposed) {
-                            insertCommentAboveSelection(project, editor, psiFile, roastText, start)
+                            insertOrReplaceGeneratedComments(project, editor, psiFile, roastText, start, end)
                         }
                     }
                 } catch (t: Throwable) {
                     val fallback = "// ROAST: Failed to contact OpenAI.\n// HELP: " + (t.message ?: "Unknown error") + "\n"
                     ApplicationManager.getApplication().invokeLater {
                         if (!project.isDisposed) {
-                            insertCommentAboveSelection(project, editor, psiFile, fallback, start)
+                            insertOrReplaceGeneratedComments(project, editor, psiFile, fallback, start, end)
                         }
                     }
                 }
@@ -85,14 +87,105 @@ class RoastSelectionAction : AnAction("Roast my code") {
         })
     }
 
-    private fun insertCommentAboveSelection(project: Project, editor: Editor, psiFile: com.intellij.psi.PsiFile, roastText: String, start: Int) {
+    private fun insertOrReplaceGeneratedComments(
+        project: Project,
+        editor: Editor,
+        psiFile: com.intellij.psi.PsiFile,
+        roastText: String,
+        selectionStart: Int,
+        selectionEnd: Int
+    ) {
         val document = editor.document
-        val line = document.getLineNumber(start)
-        val lineStartOffset = document.getLineStartOffset(line)
+        val startLine = document.getLineNumber(selectionStart)
+        val endLine = document.getLineNumber(selectionEnd)
+
+        // 1) Determine which lines to delete (selected generated comments + contiguous generated comment block directly above selection)
+        val linesToDelete = mutableSetOf<Int>()
+
+        fun isGeneratedCommentLine(lineIndex: Int): Boolean {
+            if (lineIndex < 0 || lineIndex >= document.lineCount) return false
+            val ls = document.getLineStartOffset(lineIndex)
+            val le = document.getLineEndOffset(lineIndex)
+            val text = document.getText(TextRange(ls, le))
+            val trimmed = text.trimStart()
+            val isComment = trimmed.startsWith("//")
+            val hasMarker = text.contains("ROAST:", ignoreCase = true)
+                    || text.contains("HELP:", ignoreCase = true)
+                    || text.contains("NICE:", ignoreCase = true)
+            return isComment && hasMarker
+        }
+
+        fun isBlankLine(lineIndex: Int): Boolean {
+            if (lineIndex < 0 || lineIndex >= document.lineCount) return false
+            val ls = document.getLineStartOffset(lineIndex)
+            val le = document.getLineEndOffset(lineIndex)
+            val text = document.getText(TextRange(ls, le))
+            return text.isBlank()
+        }
+
+        // Find the first non-blank line inside the selection. If none, fall back to startLine.
+        val firstNonBlankSelectedLine: Int = run {
+            var idx = startLine
+            var found = -1
+            while (idx <= endLine) {
+                if (!isBlankLine(idx)) { found = idx; break }
+                idx++
+            }
+            if (found == -1) startLine else found
+        }
+
+        // Within selection
+        for (l in startLine..endLine) {
+            if (isGeneratedCommentLine(l)) linesToDelete.add(l)
+        }
+
+        // Contiguous block directly above the first non-blank selected line,
+        // allowing whitespace-only lines between code and the generated comments.
+        run {
+            var l = firstNonBlankSelectedLine - 1
+            // Temporarily collect whitespace lines directly above code.
+            val whitespaceBuffer = mutableListOf<Int>()
+            while (l >= 0 && isBlankLine(l)) {
+                whitespaceBuffer.add(l)
+                l--
+            }
+
+            // If the line above (after skipping blanks) is a generated comment, we will
+            // delete that whole generated block AND the intervening blank lines.
+            var foundGenerated = false
+            var cursor = l
+            while (cursor >= 0 && (isGeneratedCommentLine(cursor) || (foundGenerated && isBlankLine(cursor)))) {
+                if (isGeneratedCommentLine(cursor)) foundGenerated = true
+                linesToDelete.add(cursor)
+                cursor--
+            }
+
+            if (foundGenerated) {
+                // Include the whitespace directly above code as well, so comments end up
+                // directly above the code when we re-insert.
+                linesToDelete.addAll(whitespaceBuffer)
+            }
+        }
+
+        val deletedAboveCount = linesToDelete.count { it < firstNonBlankSelectedLine }
+        val targetInsertLine = (firstNonBlankSelectedLine - deletedAboveCount).coerceAtLeast(0)
+
         val comment = "$roastText\n"
 
         WriteCommandAction.runWriteCommandAction(project) {
+            // Delete lines from bottom to top to keep offsets valid
+            linesToDelete.toList().sortedDescending().forEach { lineIdx ->
+                val ls = document.getLineStartOffset(lineIdx)
+                // Include line break
+                val le = if (lineIdx + 1 < document.lineCount) document.getLineStartOffset(lineIdx + 1) else document.textLength
+                document.deleteString(ls, le)
+            }
+
+            // After deletions, compute the new insertion offset for the target line
+            val insertLineIndex = targetInsertLine.coerceAtMost(document.lineCount.coerceAtLeast(1) - 1)
+            val lineStartOffset = document.getLineStartOffset(insertLineIndex)
             document.insertString(lineStartOffset, comment)
+
             val manager = PsiDocumentManager.getInstance(project)
             manager.doPostponedOperationsAndUnblockDocument(document)
             manager.commitDocument(document)
