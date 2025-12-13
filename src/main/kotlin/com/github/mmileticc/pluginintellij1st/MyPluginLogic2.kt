@@ -1,0 +1,29 @@
+package com.github.mmileticc.pluginintellij1st
+
+import com.intellij.openapi.command.WriteCommandAction
+import com.intellij.openapi.project.Project
+import com.intellij.psi.PsiDocumentManager
+import com.intellij.psi.PsiFile
+import org.jetbrains.kotlin.psi.KtNamedFunction
+import org.jetbrains.kotlin.psi.KtPsiFactory
+
+object MyPluginLogic2 {
+    fun run(project: Project, file: PsiFile) {
+        val factory = KtPsiFactory(project)
+
+        WriteCommandAction.runWriteCommandAction(project) {
+            val functions = file.children.filterIsInstance<KtNamedFunction>()
+
+            for (funDecl in functions) {
+                val comment = factory.createComment("// Funkcija: ${funDecl.name}")
+                file.addBefore(comment, funDecl)
+            }
+
+            val docManager = PsiDocumentManager.getInstance(project)
+            docManager.getDocument(file)?.let { doc ->
+                docManager.doPostponedOperationsAndUnblockDocument(doc)
+                docManager.commitDocument(doc)
+            }
+        }
+    }
+}
