@@ -39,6 +39,7 @@
                text="Roast Tools"
                popup="true">
             <add-to-group group-id="ToolsMenu" anchor="last"/>
+            <add-to-group group-id="EditorPopupMenu" anchor="last"/>
 
             <!-- Roast level submenu -->
             <group id="RoastLevelGroup" text="Roast level" popup="true">
