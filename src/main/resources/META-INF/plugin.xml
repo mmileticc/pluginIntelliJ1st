@@ -16,6 +16,9 @@
     <extensions defaultExtensionNs="com.intellij">
         <toolWindow factoryClass="com.github.mmileticc.pluginintellij1st.toolWindow.MyToolWindowFactory" id="MyToolWindow"/>
         <postStartupActivity implementation="com.github.mmileticc.pluginintellij1st.startup.MyProjectActivity" />
+        <annotator
+                language="kotlin"
+                implementationClass="com.github.mmileticc.pluginintellij1st.MyCommentAnnotator"/>
     </extensions>
 
     <actions>
@@ -39,4 +42,5 @@
         </action>
 
     </actions>
+
 </idea-plugin>
