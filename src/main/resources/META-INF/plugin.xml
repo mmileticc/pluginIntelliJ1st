@@ -22,7 +22,8 @@
     </extensions>
 
     <actions>
-        <!-- Editor popup action for roasting selected code -->
+
+        <!-- Editor popup action (ostaje posebno) -->
         <action id="RoastSelectionAction"
                 class="com.github.mmileticc.pluginintellij1st.RoastSelectionAction"
                 text="Roast my code"
@@ -30,39 +31,41 @@
             <add-to-group group-id="EditorPopupMenu" anchor="last"/>
         </action>
 
-        <!-- Roast level selector (Tools menu) -->
-        <group id="RoastLevelGroup" text="Roast level">
+        <!--  Glavna grupa u Tools meniju -->
+        <group id="RoastMainGroup"
+               text="Roast Tools"
+               popup="true">
             <add-to-group group-id="ToolsMenu" anchor="last"/>
-            <action id="RoastLevelLow"
-                    class="com.github.mmileticc.pluginintellij1st.RoastLevelLowAction"
-                    text="Roast level: Low"/>
-            <action id="RoastLevelMedium"
-                    class="com.github.mmileticc.pluginintellij1st.RoastLevelMediumAction"
-                    text="Roast level: Medium"/>
-            <action id="RoastLevelHigh"
-                    class="com.github.mmileticc.pluginintellij1st.RoastLevelHighAction"
-                    text="Roast level: High"/>
-        </group>
 
-        <!-- Roast language selector (Tools menu) -->
-        <group id="RoastLanguageGroup" text="Roast language">
-            <add-to-group group-id="ToolsMenu" anchor="last"/>
-            <action id="RoastLanguageEnglish"
-                    class="com.github.mmileticc.pluginintellij1st.RoastLanguageEnglishAction"
-                    text="Roast language: English"/>
-            <action id="RoastLanguageSerbian"
-                    class="com.github.mmileticc.pluginintellij1st.RoastLanguageSerbianAction"
-                    text="Roast language: Serbian"/>
-        </group>
+            <!-- Roast level submenu -->
+            <group id="RoastLevelGroup" text="Roast level" popup="true">
+                <action id="RoastLevelLow"
+                        class="com.github.mmileticc.pluginintellij1st.RoastLevelLowAction"
+                        text="Low"/>
+                <action id="RoastLevelMedium"
+                        class="com.github.mmileticc.pluginintellij1st.RoastLevelMediumAction"
+                        text="Medium"/>
+                <action id="RoastLevelHigh"
+                        class="com.github.mmileticc.pluginintellij1st.RoastLevelHighAction"
+                        text="High"/>
+            </group>
 
-        <!-- Delete all roast comments (Tools menu) -->
-        <action id="DeleteRoastCommentsAction"
-                class="com.github.mmileticc.pluginintellij1st.DeleteGeneratedCommentsAction"
-                text="Delete all generated comments"
-                description="Removes all roast comments from current file">
-            <add-to-group group-id="ToolsMenu" anchor="last"/>
-        </action>
+            <!-- Roast language submenu -->
+            <group id="RoastLanguageGroup" text="Roast language" popup="true">
+                <action id="RoastLanguageEnglish"
+                        class="com.github.mmileticc.pluginintellij1st.RoastLanguageEnglishAction"
+                        text="English"/>
+                <action id="RoastLanguageSerbian"
+                        class="com.github.mmileticc.pluginintellij1st.RoastLanguageSerbianAction"
+                        text="Serbian"/>
+            </group>
+
+            <!-- Delete roast comments -->
+            <action id="DeleteRoastCommentsAction"
+                    class="com.github.mmileticc.pluginintellij1st.DeleteGeneratedCommentsAction"
+                    text="Delete all generated comments"
+                    description="Removes all roast comments from current file"/>
+        </group>
 
     </actions>
-
 </idea-plugin>
