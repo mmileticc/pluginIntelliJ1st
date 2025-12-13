@@ -70,13 +70,13 @@ class RoastSelectionAction : AnAction("Roast my code") {
         // Prepare the GIF label for the popup (EDT)
         var popupHandle: CornerPopup.Handle? = null
         ApplicationManager.getApplication().invokeLater {
-            val icon = javax.swing.ImageIcon(RoastSelectionAction::class.java.getResource("/icons/Loading_Cat_small.gif"))
+            val icon = javax.swing.ImageIcon(RoastSelectionAction::class.java.getResource("/icons/kodee.gif"))
             val label = JLabel("", icon, SwingConstants.LEADING)
             label.border = JBUI.Borders.empty(3)
 
             val wrapper = JPanel(BorderLayout()).apply {
                 isOpaque = false
-                border = JBUI.Borders.empty(22) // ← ovo je "margin"
+                border = JBUI.Borders.empty(22)
                 add(label, BorderLayout.CENTER)
             }
 

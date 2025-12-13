@@ -33,8 +33,8 @@ object CornerPopup {
         val size = content.preferredSize
         val insets = JBUI.insets(1)
 
-        val x = root.width - size.width - insets.right
-        val y = root.height - size.height - insets.bottom
+        val x = root.width - size.width - insets.right - 50
+        val y = root.height - size.height - insets.bottom - 50
 
         popup.show(RelativePoint(root, Point(x, y)))
         return Handle(popup)
