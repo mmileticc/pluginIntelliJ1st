@@ -15,6 +15,10 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <toolWindow factoryClass="com.github.mmileticc.pluginintellij1st.toolWindow.MyToolWindowFactory" id="MyToolWindow"/>
+        <toolWindow factoryClass="com.github.mmileticc.pluginintellij1st.toolWindow.FocusKeeper9000ToolWindowFactory"
+                    id="FocusKeeper9000"
+                    anchor="right"
+                    icon="AllIcons.General.Web"/>
         <postStartupActivity implementation="com.github.mmileticc.pluginintellij1st.startup.MyProjectActivity" />
         <annotator
                 language="kotlin"
@@ -84,6 +88,18 @@
             </group>
 
         </group>
+
+        <!-- Toolbar button to open FocusKeeper9000 tool window -->
+        <action id="FocusKeeper9000OpenAction"
+                class="com.github.mmileticc.pluginintellij1st.actions.FocusKeeper9000OpenAction"
+                text="FocusKeeper9000"
+                description="Open YouTube Shorts panel"
+                icon="AllIcons.General.Web">
+            <!-- Add to main toolbar (new UI) -->
+            <add-to-group group-id="MainToolbarRight" anchor="last"/>
+            <!-- Fallback: also add to View menu -->
+            <add-to-group group-id="ViewMenu" anchor="last"/>
+        </action>
 
     </actions>
 </idea-plugin>
