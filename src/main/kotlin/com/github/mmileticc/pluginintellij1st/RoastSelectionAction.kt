@@ -7,6 +7,8 @@ import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.command.WriteCommandAction
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.progress.ProgressManager
+import com.intellij.openapi.progress.Task
 import com.intellij.psi.PsiDocumentManager
 
 class RoastSelectionAction : AnAction("Roast my code") {
@@ -40,6 +42,8 @@ class RoastSelectionAction : AnAction("Roast my code") {
             RoastSettings.Language.SERBIAN -> "Respond in Serbian (Latin script)."
         }
 
+        val start = editor.selectionModel.selectionStart
+
         val prompt = """
             Roast this code in a $style tone.
             $languageInstruction
@@ -56,16 +60,33 @@ class RoastSelectionAction : AnAction("Roast my code") {
             $selectedText
         """.trimIndent()
 
-        // Call API synchronously (simple approach as in existing code)
-        val response = OpenAIAPI.ask(prompt)
-        val roastText = OpenAIAPI.extractContent(response).replace("*/", "*∕")
+        // Run API call asynchronously to avoid blocking UI and file locks
+        ProgressManager.getInstance().run(object : Task.Backgroundable(project, "Roasting selection with OpenAI", false) {
+            override fun run(indicator: com.intellij.openapi.progress.ProgressIndicator) {
+                indicator.text = "Rating Selection..."
+                try {
+                    val response = OpenAIAPI.ask(prompt)
+                    val roastText = OpenAIAPI.extractContent(response).replace("*/", "*∕")
 
-        insertCommentAboveSelection(project, editor, psiFile, roastText)
+                    ApplicationManager.getApplication().invokeLater {
+                        if (!project.isDisposed) {
+                            insertCommentAboveSelection(project, editor, psiFile, roastText, start)
+                        }
+                    }
+                } catch (t: Throwable) {
+                    val fallback = "// ROAST: Failed to contact OpenAI.\n// HELP: " + (t.message ?: "Unknown error") + "\n"
+                    ApplicationManager.getApplication().invokeLater {
+                        if (!project.isDisposed) {
+                            insertCommentAboveSelection(project, editor, psiFile, fallback, start)
+                        }
+                    }
+                }
+            }
+        })
     }
 
-    private fun insertCommentAboveSelection(project: Project, editor: Editor, psiFile: com.intellij.psi.PsiFile, roastText: String) {
+    private fun insertCommentAboveSelection(project: Project, editor: Editor, psiFile: com.intellij.psi.PsiFile, roastText: String, start: Int) {
         val document = editor.document
-        val start = editor.selectionModel.selectionStart
         val line = document.getLineNumber(start)
         val lineStartOffset = document.getLineStartOffset(line)
         val comment = "$roastText\n"
