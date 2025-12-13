@@ -11,6 +11,9 @@ import com.intellij.openapi.progress.ProgressManager
 import com.intellij.openapi.progress.Task
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiDocumentManager
+import com.intellij.util.ui.JBUI
+import javax.swing.JLabel
+import javax.swing.SwingConstants
 
 class RoastSelectionAction : AnAction("Roast my code") {
     override fun update(e: AnActionEvent) {
@@ -62,10 +65,19 @@ class RoastSelectionAction : AnAction("Roast my code") {
             $selectedText
         """.trimIndent()
 
+        // Prepare the GIF label for the popup (EDT)
+        var popupHandle: CornerPopup.Handle? = null
+        ApplicationManager.getApplication().invokeLater {
+            val icon = javax.swing.ImageIcon(RoastSelectionAction::class.java.getResource("/icons/Loading_Cat.gif"))
+            val label = JLabel("", icon, SwingConstants.LEADING)
+            label.border = JBUI.Borders.empty(2)
+            popupHandle = CornerPopup.showBottomRight(project, label)
+        }
+
         // Run API call asynchronously to avoid blocking UI and file locks
         ProgressManager.getInstance().run(object : Task.Backgroundable(project, "Roasting selection with OpenAI", false) {
             override fun run(indicator: com.intellij.openapi.progress.ProgressIndicator) {
-                indicator.text = "Rating Selection..."
+                indicator.text = "Roasting Selection..."
                 try {
                     val response = OpenAIAPI.ask(prompt)
                     val roastText = OpenAIAPI.extractContent(response).replace("*/", "*∕")
@@ -82,6 +94,12 @@ class RoastSelectionAction : AnAction("Roast my code") {
                             insertOrReplaceGeneratedComments(project, editor, psiFile, fallback, start, end)
                         }
                     }
+                }
+            }
+
+            override fun onFinished() {
+                ApplicationManager.getApplication().invokeLater {
+                    CornerPopup.close(popupHandle)
                 }
             }
         })

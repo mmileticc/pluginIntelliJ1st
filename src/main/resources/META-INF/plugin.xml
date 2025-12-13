@@ -34,7 +34,7 @@
                 description="Roast selected code and insert a comment above it">
             <keyboard-shortcut
                     keymap="$default"
-                    first-keystroke="ctrl alt R"/>
+                    first-keystroke="ctrl alt Q"/>
             <add-to-group group-id="EditorPopupMenu" anchor="last"/>
         </action>
 
