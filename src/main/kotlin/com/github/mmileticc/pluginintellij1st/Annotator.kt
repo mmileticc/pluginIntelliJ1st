@@ -1,5 +1,6 @@
 package com.github.mmileticc.pluginintellij1st
 
+import com.github.mmileticc.pluginintellij1st.toolWindow.TodoToolWindowFactory
 import com.intellij.lang.annotation.AnnotationHolder
 import com.intellij.lang.annotation.Annotator
 import com.intellij.lang.annotation.HighlightSeverity
@@ -51,6 +52,7 @@ class MyCommentAnnotator : Annotator {
             }
 
             element.text.startsWith("// DONE") -> {
+                TodoToolWindowFactory.todoPanelInstance?.refresh()
                 holder.newSilentAnnotation(HighlightSeverity.INFORMATION)
                     .enforcedTextAttributes(
                         TextAttributes(JBColor.CYAN, null, null, null, Font.PLAIN)

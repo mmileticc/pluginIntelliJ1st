@@ -27,6 +27,16 @@
         <annotator
                 language="kotlin"
                 implementationClass="com.github.mmileticc.pluginintellij1st.MyCommentAnnotator"/>
+
+        <codeInsight.lineMarkerProvider
+                language="kotlin"
+                implementationClass="com.github.mmileticc.pluginintellij1st.TodoLineMarkerProvider"/>
+
+        <codeInsight.lineMarkerProvider
+                language="kotlin"
+                implementationClass="com.github.mmileticc.pluginintellij1st.HelpLineMarkerProvider"/>
+
+
     </extensions>
 
     <actions>
@@ -107,4 +117,7 @@
         </action>
 
     </actions>
+
+
+
 </idea-plugin>

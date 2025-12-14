@@ -21,14 +21,19 @@ class TodoToolWindowFactory : ToolWindowFactory {
 
     override fun shouldBeAvailable(project: Project): Boolean = true
 
+    companion object {
+        var todoPanelInstance: TodoPanel? = null
+    }
+
     override fun createToolWindowContent(project: Project, toolWindow: ToolWindow) {
         val contentFactory = ContentFactory.getInstance()
         val panel = TodoPanel(project)
+        todoPanelInstance = panel
         val content = contentFactory.createContent(panel, null, false)
         toolWindow.contentManager.addContent(content)
     }
 
-    private class TodoPanel(private val project: Project) : JBPanel<TodoPanel>(BorderLayout()) {
+    class TodoPanel(private val project: Project) : JBPanel<TodoPanel>(BorderLayout()) {
         private val service = TodoScannerService.getInstance(project)
 
         private val progressLabel = JBLabel("0% solved (0/0)")
@@ -148,7 +153,7 @@ class TodoToolWindowFactory : ToolWindowFactory {
             }
         }
 
-        private fun refresh() {
+        fun refresh() {
             // Disable refresh while scanning and show transient status
             refreshButton.isEnabled = false
             progressLabel.text = "Scanning..."
