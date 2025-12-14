@@ -25,15 +25,15 @@
         <postStartupActivity implementation="com.github.mmileticc.pluginintellij1st.startup.MyProjectActivity" />
         <annotator
                 language="kotlin"
-                implementationClass="com.github.mmileticc.pluginintellij1st.MyCommentAnnotator"/>
+                implementationClass="com.github.mmileticc.pluginintellij1st.comments.MyCommentAnnotator"/>
 
         <codeInsight.lineMarkerProvider
                 language="kotlin"
-                implementationClass="com.github.mmileticc.pluginintellij1st.TodoLineMarkerProvider"/>
+                implementationClass="com.github.mmileticc.pluginintellij1st.comments.TodoLineMarkerProvider"/>
 
         <codeInsight.lineMarkerProvider
                 language="kotlin"
-                implementationClass="com.github.mmileticc.pluginintellij1st.HelpLineMarkerProvider"/>
+                implementationClass="com.github.mmileticc.pluginintellij1st.comments.HelpLineMarkerProvider"/>
 
 
     </extensions>
@@ -42,7 +42,7 @@
 
         <!-- Editor popup action (ostaje posebno) -->
         <action id="RoastSelectionAction"
-                class="com.github.mmileticc.pluginintellij1st.RoastSelectionAction"
+                class="com.github.mmileticc.pluginintellij1st.roasting.RoastSelectionAction"
                 text="Roast my code"
                 description="Roast selected code and insert a comment above it">
             <keyboard-shortcut
@@ -61,30 +61,30 @@
             <!-- Roast level submenu -->
             <group id="RoastLevelGroup" text="Roast level" popup="true">
                 <action id="RoastLevelLow"
-                        class="com.github.mmileticc.pluginintellij1st.RoastLevelLowAction"
+                        class="com.github.mmileticc.pluginintellij1st.roasting.RoastLevelLowAction"
                         text="Low"/>
                 <action id="RoastLevelMedium"
-                        class="com.github.mmileticc.pluginintellij1st.RoastLevelMediumAction"
+                        class="com.github.mmileticc.pluginintellij1st.roasting.RoastLevelMediumAction"
                         text="Medium"/>
                 <action id="RoastLevelHigh"
-                        class="com.github.mmileticc.pluginintellij1st.RoastLevelHighAction"
+                        class="com.github.mmileticc.pluginintellij1st.roasting.RoastLevelHighAction"
                         text="High"/>
             </group>
 
             <!-- Roast language submenu -->
             <group id="RoastLanguageGroup" text="Roast language" popup="true">
                 <action id="RoastLanguageEnglish"
-                        class="com.github.mmileticc.pluginintellij1st.RoastLanguageEnglishAction"
+                        class="com.github.mmileticc.pluginintellij1st.roasting.RoastLanguageEnglishAction"
                         text="English"/>
                 <action id="RoastLanguageSerbian"
-                        class="com.github.mmileticc.pluginintellij1st.RoastLanguageSerbianAction"
+                        class="com.github.mmileticc.pluginintellij1st.roasting.RoastLanguageSerbianAction"
                         text="Serbian"/>
             </group>
 
             <!-- Delete roast comments -->
             <group id = "DeleteRoastComments" text = "Delete comments" popup = "true">
                 <action id="DeleteGeneratedCommentsAction"
-                        class="com.github.mmileticc.pluginintellij1st.DeleteGeneratedCommentsAction"
+                        class="com.github.mmileticc.pluginintellij1st.roasting.DeleteGeneratedCommentsAction"
                         text="Delete all generated comments"
                         description="Removes all generated roast comments from current file">
                     <keyboard-shortcut
@@ -92,11 +92,11 @@
                             first-keystroke="ctrl alt D"/>
                 </action>
                 <action id="DeleteNiceCommentsAction"
-                        class="com.github.mmileticc.pluginintellij1st.DeleteNiceCommentsAction"
+                        class="com.github.mmileticc.pluginintellij1st.roasting.DeleteNiceCommentsAction"
                         text="Delete only NICE comments"
                         description="Removes all generated NICE comments from current file"/>
                 <action id="DeleteRoastCommentsAction"
-                        class="com.github.mmileticc.pluginintellij1st.DeleteRoastCommentsAction"
+                        class="com.github.mmileticc.pluginintellij1st.roasting.DeleteRoastCommentsAction"
                         text="Delete only ROAST comments"
                         description="Removes all generated ROAST comments from current file"/>
             </group>

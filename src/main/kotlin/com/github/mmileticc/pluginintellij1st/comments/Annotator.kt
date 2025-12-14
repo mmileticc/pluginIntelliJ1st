@@ -1,4 +1,4 @@
-package com.github.mmileticc.pluginintellij1st
+package com.github.mmileticc.pluginintellij1st.comments
 
 import com.github.mmileticc.pluginintellij1st.toolWindow.TodoToolWindowFactory
 import com.intellij.lang.annotation.AnnotationHolder

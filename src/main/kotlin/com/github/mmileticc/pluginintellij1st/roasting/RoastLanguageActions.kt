@@ -1,4 +1,4 @@
-package com.github.mmileticc.pluginintellij1st
+package com.github.mmileticc.pluginintellij1st.roasting
 
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.ToggleAction

@@ -1,5 +1,7 @@
-package com.github.mmileticc.pluginintellij1st
+package com.github.mmileticc.pluginintellij1st.roasting
 
+import com.github.mmileticc.pluginintellij1st.roasting.CornerPopup
+import com.github.mmileticc.pluginintellij1st.OpenAIAPI
 import com.intellij.openapi.actionSystem.ActionUpdateThread
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
@@ -7,13 +9,16 @@ import com.intellij.openapi.actionSystem.CommonDataKeys
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.command.WriteCommandAction
 import com.intellij.openapi.editor.Editor
+import com.intellij.openapi.progress.ProgressIndicator
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.progress.ProgressManager
 import com.intellij.openapi.progress.Task
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiDocumentManager
+import com.intellij.psi.PsiFile
 import com.intellij.util.ui.JBUI
 import java.awt.BorderLayout
+import javax.swing.ImageIcon
 import javax.swing.JLabel
 import javax.swing.JPanel
 import javax.swing.SwingConstants
@@ -71,7 +76,7 @@ class RoastSelectionAction : AnAction("Roast my code") {
         // Prepare the GIF label for the popup (EDT)
         var popupHandle: CornerPopup.Handle? = null
         ApplicationManager.getApplication().invokeLater {
-            val icon = javax.swing.ImageIcon(RoastSelectionAction::class.java.getResource("/icons/kodee.gif"))
+            val icon = ImageIcon(RoastSelectionAction::class.java.getResource("/icons/kodee.gif"))
             val label = JLabel("", icon, SwingConstants.LEADING)
             label.border = JBUI.Borders.empty(3)
 
@@ -86,7 +91,7 @@ class RoastSelectionAction : AnAction("Roast my code") {
 
         // Run API call asynchronously to avoid blocking UI and file locks
         ProgressManager.getInstance().run(object : Task.Backgroundable(project, "Roasting selection with OpenAI", false) {
-            override fun run(indicator: com.intellij.openapi.progress.ProgressIndicator) {
+            override fun run(indicator: ProgressIndicator) {
                 indicator.text = "Roasting Selection..."
                 try {
                     val response = OpenAIAPI.ask(prompt)
@@ -122,7 +127,7 @@ class RoastSelectionAction : AnAction("Roast my code") {
     private fun insertOrReplaceGeneratedComments(
         project: Project,
         editor: Editor,
-        psiFile: com.intellij.psi.PsiFile,
+        psiFile: PsiFile,
         roastText: String,
         selectionStart: Int,
         selectionEnd: Int

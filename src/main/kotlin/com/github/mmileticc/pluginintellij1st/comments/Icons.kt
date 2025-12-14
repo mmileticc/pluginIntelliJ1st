@@ -1,4 +1,4 @@
-package com.github.mmileticc.pluginintellij1st
+package com.github.mmileticc.pluginintellij1st.comments
 
 import com.intellij.openapi.util.IconLoader
 import javax.swing.Icon

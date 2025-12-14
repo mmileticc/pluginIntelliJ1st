@@ -1,14 +1,12 @@
-package com.github.mmileticc.pluginintellij1st
+package com.github.mmileticc.pluginintellij1st.roasting
 
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.popup.JBPopup
-import com.intellij.openapi.wm.WindowManager
 import com.intellij.openapi.ui.popup.JBPopupFactory
+import com.intellij.openapi.wm.WindowManager
 import com.intellij.ui.awt.RelativePoint
 import com.intellij.util.ui.JBUI
 import java.awt.Point
-import javax.swing.JLabel
-
 import javax.swing.JComponent
 
 object CornerPopup {
@@ -45,4 +43,3 @@ object CornerPopup {
     }
 
 }
-
