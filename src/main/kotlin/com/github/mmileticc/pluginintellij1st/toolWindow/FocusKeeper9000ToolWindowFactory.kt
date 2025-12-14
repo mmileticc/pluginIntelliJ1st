@@ -32,7 +32,7 @@ class FocusKeeper9000ToolWindowFactory : ToolWindowFactory {
             return root
         }
 
-        val browser = JBCefBrowser("https://youtube.com/shorts/")
+        val browser = JBCefBrowser("https://stackoverflow.com/questions")
 
         // Simple toolbar with Back/Forward/Reload
         val toolbar = JToolBar().apply {
@@ -40,18 +40,11 @@ class FocusKeeper9000ToolWindowFactory : ToolWindowFactory {
             border = JBUI.Borders.empty(4)
         }
 
-        val backBtn = JButton("◀")
+        val backBtn = JButton("Go Back") //◀
         backBtn.toolTipText = "Back"
         backBtn.addActionListener {
             val cef = browser.cefBrowser
             if (cef != null && cef.canGoBack()) cef.goBack()
-        }
-
-        val forwardBtn = JButton("▶")
-        forwardBtn.toolTipText = "Forward"
-        forwardBtn.addActionListener {
-            val cef = browser.cefBrowser
-            if (cef != null && cef.canGoForward()) cef.goForward()
         }
 
         val reloadBtn = JButton("⟳")
@@ -59,7 +52,7 @@ class FocusKeeper9000ToolWindowFactory : ToolWindowFactory {
         reloadBtn.addActionListener { browser.cefBrowser?.reload() }
 
         toolbar.add(backBtn)
-        toolbar.add(forwardBtn)
+        toolbar.addSeparator()
         toolbar.add(reloadBtn)
 
         root.add(toolbar, BorderLayout.NORTH)
