@@ -7,11 +7,15 @@ import com.intellij.codeInsight.daemon.LineMarkerProvider
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.command.WriteCommandAction
 import com.intellij.openapi.editor.markup.GutterIconRenderer
+import com.intellij.openapi.fileEditor.FileDocumentManager
 import com.intellij.openapi.util.TextRange
+import com.intellij.openapi.util.text.StringUtil
+import com.intellij.patterns.PlatformPatterns.psiFile
 import com.intellij.psi.PsiComment
 import com.intellij.psi.PsiDocumentManager
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiElementFactory
+import org.jetbrains.kotlin.psi.KtPsiFactory
 
 class HelpLineMarkerProvider: LineMarkerProvider {
 
@@ -45,7 +49,13 @@ class HelpLineMarkerProvider: LineMarkerProvider {
 
                 val text = document.getText(TextRange(start, end)) // Extracted line
                 val alteredText = text.replace("// HELP", "// TODO")
-                comment.parent.addAfter(PsiElementFactory.getInstance(project).createCommentFromText(alteredText, comment), comment)
+//                alteredText += "\n"
+                comment.parent.addBefore(PsiElementFactory.getInstance(project).createCommentFromText(alteredText, comment), comment.parent.firstChild)
+
+                val newLine = KtPsiFactory(project).createWhiteSpace("\n")
+                comment.parent.addAfter(newLine, comment.parent.firstChild)
+
+
                 PsiDocumentManager.getInstance(project).commitDocument(document)
                 TodoToolWindowFactory.todoPanelInstance?.refresh()
             }
